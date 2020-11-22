@@ -9,23 +9,10 @@ lines = [
     "         ",
     ]
 
-# for i in range(len(lines)):
-#     lines[i] = " ".join(lines[i])
 
 i = 0
 
-# min_rate = .1
-# max_rate = 5
-# min_rate_dur = 5
-# max_rate_dur = 60
-
 class RateManager:
-    # min_rate = .1
-    # max_rate = 5
-    # # min_rate_dur = 5
-    # # max_rate_dur = 60
-    # initial_rate = 1
-
     def __init__(self, initial_rate, min_rate, max_rate, rate_delta):
         self.rate = initial_rate
         self.max_rate = max_rate
@@ -117,4 +104,3 @@ while True:
     if rm_bumper.rate >= BUMPER_THRESHOLD:
         rm.bump_rate()
         rm_chance.bump_rate()
-        # rm_noise.bump_rate()
