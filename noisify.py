@@ -9,9 +9,6 @@ lines = [
     "         ",
     ]
 
-
-i = 0
-
 class RateManager:
     def __init__(self, initial_rate, min_rate, max_rate, rate_delta):
         self.rate = initial_rate
@@ -76,6 +73,8 @@ if DEBUG:
 
 BUMPER_THRESHOLD = .83
 
+
+i = 0
 while True:
     if DEBUG:
         print(f"R{rm.rate:2.1f} "
