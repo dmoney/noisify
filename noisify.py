@@ -54,18 +54,6 @@ def noisify(string, factor):
             out += c
     return out
 
-
-# randomly varying rate of scrolling
-rm = RateManager(1, .1, 2.5, -.1)
-
-# randomly varying rate of chance of output
-rm_chance = RateManager(.2, .05, .9, .05)
-
-# randomly varying rate of chance of bumping up other rates
-rm_bumper = RateManager(.01, .01, .95, .1)
-
-rm_noise = RateManager(.1, .01, .99, -.007)
-
 NUM_COLUMNS = 8
 DEBUG = False
 if DEBUG:
@@ -73,33 +61,47 @@ if DEBUG:
 
 BUMPER_THRESHOLD = .83
 
+def main():
+    # randomly varying rate of scrolling
+    rm = RateManager(1, .1, 2.5, -.1)
 
-i = 0
-while True:
-    if DEBUG:
-        print(f"R{rm.rate:2.1f} "
-            f"C{rm_chance.rate:.2f} "
-            f"B{rm_bumper.rate:.2f} "
-            f"N{rm_noise.rate:.2f}|", end=" ")
-    line = "   " + lines[i] + "   "
+    # randomly varying rate of chance of output
+    rm_chance = RateManager(.2, .05, .9, .05)
 
-    def transform(s):
-        s = maybe(s, rm_chance.rate)
-        if random.random() < rm_noise.rate:
-            s = noisify(s, rm_noise.rate)
-        return s
+    # randomly varying rate of chance of bumping up other rates
+    rm_bumper = RateManager(.01, .01, .95, .1)
 
-    outline = "".join([transform(line) for _ in range(NUM_COLUMNS)])
-    print(outline)
-    sys.stdout.flush()
-    i = (i + 1) % len(lines)
+    rm_noise = RateManager(.1, .01, .99, -.007)
 
-    rm_bumper.update_rate()
-    rm_chance.update_rate()
-    rm_noise.update_rate()
-    rm.update_rate()
-    rm.sleep()
+    i = 0
+    while True:
+        if DEBUG:
+            print(f"R{rm.rate:2.1f} "
+                f"C{rm_chance.rate:.2f} "
+                f"B{rm_bumper.rate:.2f} "
+                f"N{rm_noise.rate:.2f}|", end=" ")
+        line = "   " + lines[i] + "   "
 
-    if rm_bumper.rate >= BUMPER_THRESHOLD:
-        rm.bump_rate()
-        rm_chance.bump_rate()
+        def transform(s):
+            s = maybe(s, rm_chance.rate)
+            if random.random() < rm_noise.rate:
+                s = noisify(s, rm_noise.rate)
+            return s
+
+        outline = "".join([transform(line) for _ in range(NUM_COLUMNS)])
+        print(outline)
+        sys.stdout.flush()
+        i = (i + 1) % len(lines)
+
+        rm_bumper.update_rate()
+        rm_chance.update_rate()
+        rm_noise.update_rate()
+        rm.update_rate()
+        rm.sleep()
+
+        if rm_bumper.rate >= BUMPER_THRESHOLD:
+            rm.bump_rate()
+            rm_chance.bump_rate()
+
+if __name__ == '__main__':
+    main()
