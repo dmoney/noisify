@@ -54,14 +54,13 @@ def noisify(string, factor):
             out += c
     return out
 
-NUM_COLUMNS = 8
-DEBUG = False
-if DEBUG:
-    NUM_COLUMNS -= 2
-
 BUMPER_THRESHOLD = .83
 
-def main(filename=None):
+def main(filename=None, debug=False):
+    num_columns = 8
+    if debug:
+        num_columns -= 2
+
     lines = read_input(filename)
 
     # randomly varying rate of scrolling
@@ -77,7 +76,8 @@ def main(filename=None):
 
     i = 0
     while True:
-        if DEBUG:
+        if debug:
+            # Print current values of rate managers.
             print(f"R{rm.rate:2.1f} "
                 f"C{rm_chance.rate:.2f} "
                 f"B{rm_bumper.rate:.2f} "
@@ -90,7 +90,7 @@ def main(filename=None):
                 s = noisify(s, rm_noise.rate)
             return s
 
-        outline = "".join([transform(line) for _ in range(NUM_COLUMNS)])
+        outline = "".join([transform(line) for _ in range(num_columns)])
         print(outline)
         sys.stdout.flush()
         i = (i + 1) % len(lines)
@@ -108,12 +108,17 @@ def main(filename=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Script to infinitely scroll a piece of text or ascii art, with added textual noise.")
 
-    parser.add_argument('FILENAME', help="File with input text.", nargs='?')
+    parser.add_argument('FILENAME', help="file with input text", nargs='?')
+
+    # parser.add_argument('--screen-width', type=int, default=120, help="screen width in characters (default 120)", metavar="W")
+
+    parser.add_argument('--debug', action="store_true", help="show debugging information")
 
     args = parser.parse_args()
     filename = args.FILENAME
+    debug = args.debug
 
     try:
-        main(filename)
+        main(filename, debug)
     except KeyboardInterrupt:
         pass
