@@ -80,8 +80,16 @@ def noisify(string, factor):
     return out
 
 
-def main(filename=None, debug=False, noise=True):
-    term_width, _ = os.get_terminal_size()
+def main(filename=None, debug=False, noise=True, term_width=None):
+    if not term_width:
+        try:
+            term_width, _ = os.get_terminal_size()
+        except OSError as ose:
+            print("Couldn't get terminal width.  If you're sending the "
+                "output to another program, you may need to explicitly "
+                "specify the terminal width using --term-width=<number>.  "
+                "You can find the terminal width with --show-term-width.")
+            sys.exit(1)
     DEBUG_OUTPUT_WIDTH = 26
     if debug:
         term_width -= DEBUG_OUTPUT_WIDTH
@@ -170,18 +178,32 @@ def main(filename=None, debug=False, noise=True):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Script to infinitely scroll a piece of text or ascii art, with added textual noise.")
 
-    parser.add_argument('FILENAME', help="file with input text", nargs='?')
+    parser.add_argument('FILENAME', nargs='?',
+        help="file with input text")
 
-    parser.add_argument("--no-noise", action="store_true", help="don't add noise.")
+    parser.add_argument("--no-noise", action="store_true",
+        help="don't add noise.")
 
-    parser.add_argument('--debug', action="store_true", help="show debugging information")
+    parser.add_argument('--debug', action="store_true",
+        help="show debugging information")
+
+    parser.add_argument('--show-term-width', action="store_true",
+        help="show current terminal window's width and exit")
+
+    parser.add_argument('--term-width', type=int)
 
     args = parser.parse_args()
     filename = args.FILENAME
     debug = args.debug
     add_noise = not args.no_noise
+    term_width = args.term_width
+
+    if args.show_term_width:
+        ts_columns, _ = os.get_terminal_size()
+        print(ts_columns)
+        sys.exit(0)
 
     try:
-        main(filename, debug, add_noise)
+        main(filename, debug, add_noise, term_width)
     except KeyboardInterrupt:
         pass
