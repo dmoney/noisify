@@ -11,6 +11,10 @@ For best results, add rainbow colors to the text by piping the result through [l
 
     $ python3 noisify.py filename.txt | lolcat
     
+To see command-line options:
+
+    $ python3 noisify.py -h
+    
 Before producing output, noisify.py reads in the entire file or standard input 
 until end of file (Ctrl+D if you're typing the input directly), 
 so it won't currently handle an infinite stream of input.
