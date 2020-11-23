@@ -1,13 +1,12 @@
 import time, sys, random, datetime
-lines = [
-    "    O    ",
-    "    V    ",
-    "O (D*-) O",
-    "    U    ",
-    "  O   O  ",
-    "         ",
-    "         ",
-    ]
+
+def read_input(filename=None):
+    if filename:
+        with open(filename, 'r') as file:
+            lines = [line.rstrip('\n') for line in file]
+        return lines
+    else:
+        return [line for line in sys.stdin.read().split("\n")]
 
 class RateManager:
     def __init__(self, initial_rate, min_rate, max_rate, rate_delta):
@@ -61,7 +60,9 @@ if DEBUG:
 
 BUMPER_THRESHOLD = .83
 
-def main():
+def main(filename=None):
+    lines = read_input(filename)
+
     # randomly varying rate of scrolling
     rm = RateManager(1, .1, 2.5, -.1)
 
@@ -104,4 +105,7 @@ def main():
             rm_chance.bump_rate()
 
 if __name__ == '__main__':
-    main()
+    filename = None
+    if len(sys.argv) > 1:
+        filename = sys.argv[1]
+    main(filename)
