@@ -83,7 +83,7 @@ def main(filename=None, debug=False):
     # randomly varying rate of noise
     rm_noise = RateManager(.1, .01, .99, -.007)
 
-    i = 0
+    current_line_num = 0
     while True:
         if debug:
             # Print current values of rate managers.
@@ -91,7 +91,7 @@ def main(filename=None, debug=False):
                 f"C{rm_chance.rate:.2f} "
                 f"B{rm_bumper.rate:.2f} "
                 f"N{rm_noise.rate:.2f}|", end=" ")
-        line = "   " + lines[i] + "   "
+        line = "   " + lines[current_line_num] + "   "
 
         # Single use function for use in the generator expression below.
         def transform(s):
@@ -104,7 +104,7 @@ def main(filename=None, debug=False):
         outline = "".join([transform(line) for _ in range(num_columns)])
         print(outline)
         sys.stdout.flush()
-        i = (i + 1) % len(lines)
+        current_line_num = (current_line_num + 1) % len(lines)
 
         rm_bumper.update_rate()
         rm_chance.update_rate()
