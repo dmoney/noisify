@@ -1,14 +1,35 @@
-import time, sys, random, datetime
+import time, sys, os, random, datetime
 import argparse
+
+def normalize_line_lengths(line_array):
+    """Pad all strings in the array to be the same length."""
+    max_length = max([len(s) for s in line_array])
+    for i, line in enumerate(line_array):
+        line_array[i] += " " * (max_length - len(line))
+
+def add_margins(line_array, horizontal_margin_size, vertical_margin_size):
+    """Add vertical and horizontal margins to line_array."""
+    line_length = len(line_array[0])
+
+    v_margin = " " * line_length
+    h_margin = " " * horizontal_margin_size
+
+    for _ in range(vertical_margin_size):
+        line_array.append(v_margin)
+
+    for i in range(len(line_array)):
+        line_array[i] = f"{h_margin}{line_array[i]}{h_margin}"
 
 def read_input(filename=None):
     """Read input into an array of line strings."""
     if filename:
         with open(filename, 'r') as file:
             lines = [line.rstrip('\n') for line in file]
-        return lines
     else:
-        return [line for line in sys.stdin.read().split("\n")]
+        lines = [line for line in sys.stdin.read().split("\n")]
+    normalize_line_lengths(lines)
+    add_margins(lines, 3, 1)
+    return lines
 
 class RateManager:
     """A RateManager manages a value (rate) that randomly increases or decreases when the update_rate is called."""
@@ -61,12 +82,18 @@ def noisify(string, factor):
     return out
 
 
-def main(filename=None, debug=False):
-    num_columns = 8
+def main(filename=None, debug=False, noise=True):
+    term_width, _ = os.get_terminal_size()
+    DEBUG_OUTPUT_WIDTH = 26
     if debug:
-        num_columns -= 2
+        term_width -= DEBUG_OUTPUT_WIDTH
 
     lines = read_input(filename)
+    if len(lines) == 0:
+        raise Exception("No input.")
+
+    num_columns = term_width // len(lines[0])
+
 
     # The following rate manager parameters were discovered through
     # experimentation and shouldn't be assumed to have special
@@ -98,17 +125,19 @@ def main(filename=None, debug=False):
                 f"C{rm_chance.rate:.2f} "
                 f"B{rm_bumper.rate:.2f} "
                 f"N{rm_noise.rate:.2f}|", end=" ")
-        line = "   " + lines[current_line_num] + "   "
+        # line = "   " + lines[current_line_num] + "   "
+        line = lines[current_line_num]
 
         # Single use function for use in the generator expression below.
-        def transform(s):
+        def transform(s, noise):
             """Apply maybe and noisify transformations to string s."""
-            s = maybe(s, rm_chance.rate)
-            if random.random() < rm_noise.rate:
-                s = noisify(s, rm_noise.rate)
+            if noise:
+                s = maybe(s, rm_chance.rate)
+                if random.random() < rm_noise.rate:
+                    s = noisify(s, rm_noise.rate)
             return s
 
-        outline = "".join([transform(line) for _ in range(num_columns)])
+        outline = "".join([transform(line, noise) for _ in range(num_columns)])
         print(outline)
         sys.stdout.flush()
         current_line_num = (current_line_num + 1) % len(lines)
@@ -128,16 +157,16 @@ if __name__ == '__main__':
 
     parser.add_argument('FILENAME', help="file with input text", nargs='?')
 
-    # TODO: adapting to different screen widths and art sizes.
-    # parser.add_argument('--screen-width', type=int, default=120, help="screen width in characters (default 120)", metavar="W")
+    parser.add_argument("--no-noise", action="store_true", help="don't add noise.")
 
     parser.add_argument('--debug', action="store_true", help="show debugging information")
 
     args = parser.parse_args()
     filename = args.FILENAME
     debug = args.debug
+    add_noise = not args.no_noise
 
     try:
-        main(filename, debug)
+        main(filename, debug, add_noise)
     except KeyboardInterrupt:
         pass
