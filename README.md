@@ -11,6 +11,10 @@ For best results, add rainbow colors to the text by piping the result through [l
 
     $ python3 noisify.py --term-width=80 example.txt | lolcat
 
+Example output:
+
+![Screenshot showing ascii smiley faces in rainbow colors with text noise](https://user-images.githubusercontent.com/30746/99932780-18530300-2d27-11eb-96a3-b5694b9c8d9b.png)
+
 To see command-line options:
 
     $ python3 noisify.py -h
