@@ -1,4 +1,5 @@
 import time, sys, random, datetime
+import argparse
 
 def read_input(filename=None):
     if filename:
@@ -105,7 +106,14 @@ def main(filename=None):
             rm_chance.bump_rate()
 
 if __name__ == '__main__':
-    filename = None
-    if len(sys.argv) > 1:
-        filename = sys.argv[1]
-    main(filename)
+    parser = argparse.ArgumentParser(description="Script to infinitely scroll a piece of text or ascii art, with added textual noise.")
+
+    parser.add_argument('FILENAME', help="File with input text.", nargs='?')
+
+    args = parser.parse_args()
+    filename = args.FILENAME
+
+    try:
+        main(filename)
+    except KeyboardInterrupt:
+        pass
