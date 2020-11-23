@@ -15,6 +15,10 @@ Example output:
 
 ![Screenshot showing ascii smiley faces in rainbow colors with text noise](https://user-images.githubusercontent.com/30746/99932780-18530300-2d27-11eb-96a3-b5694b9c8d9b.png)
 
+Or after the noise ramps up a bit more:
+
+![Screenshot showing a lot more text noise in rainbow colors, with some smiley faces poking through.](https://user-images.githubusercontent.com/30746/99933039-d8405000-2d27-11eb-84ba-f0e9ef3ea923.png)
+
 To see command-line options:
 
     $ python3 noisify.py -h
