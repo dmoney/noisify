@@ -60,9 +60,6 @@ def noisify(string, factor):
             out += c
     return out
 
-# Bumper rate manager causes speed and noise to increase more,
-# if its current rate is above this threshold.
-BUMPER_THRESHOLD = .83
 
 def main(filename=None, debug=False):
     num_columns = 8
@@ -70,6 +67,11 @@ def main(filename=None, debug=False):
         num_columns -= 2
 
     lines = read_input(filename)
+
+    # The following rate manager parameters were discovered through
+    # experimentation and shouldn't be assumed to have special
+    # significance, other than that the program has the kind
+    # of feel I was going for.
 
     # randomly varying rate of scrolling
     rm = RateManager(1, .1, 2.5, -.1)
@@ -79,6 +81,11 @@ def main(filename=None, debug=False):
 
     # randomly varying rate of chance of bumping up other rates
     rm_bumper = RateManager(.01, .01, .95, .1)
+
+    # value of rm_bumper.rate above which other rates will be bumped.
+    # The effect is that, above this threshold, the visualization should
+    # seem to have more "energy" or be "on fire".
+    BUMPER_THRESHOLD = .83
 
     # randomly varying rate of noise
     rm_noise = RateManager(.1, .01, .99, -.007)
@@ -121,6 +128,7 @@ if __name__ == '__main__':
 
     parser.add_argument('FILENAME', help="file with input text", nargs='?')
 
+    # TODO: adapting to different screen widths and art sizes.
     # parser.add_argument('--screen-width', type=int, default=120, help="screen width in characters (default 120)", metavar="W")
 
     parser.add_argument('--debug', action="store_true", help="show debugging information")
