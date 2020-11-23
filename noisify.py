@@ -93,8 +93,9 @@ def main(filename=None, debug=False):
                 f"N{rm_noise.rate:.2f}|", end=" ")
         line = "   " + lines[i] + "   "
 
+        # Single use function for use in the generator expression below.
         def transform(s):
-            """Single use function for use in the generator expression below."""
+            """Apply maybe and noisify transformations to string s."""
             s = maybe(s, rm_chance.rate)
             if random.random() < rm_noise.rate:
                 s = noisify(s, rm_noise.rate)
