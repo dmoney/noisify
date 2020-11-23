@@ -99,6 +99,8 @@ def main(filename=None, debug=False, noise=True, term_width=None):
         raise Exception("No input.")
 
     num_columns = term_width // len(lines[0])
+    if num_columns <= 0:
+        num_columns = 1
 
 
     # The following rate manager parameters were discovered through
