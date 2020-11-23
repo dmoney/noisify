@@ -55,8 +55,6 @@ class RateManager:
         self.rate = min(self.rate, self.max_rate)
         self.rate = max(self.rate, self.min_rate)
 
-    def sleep(self):
-        time.sleep(self.rate)
 
 def maybe(string, chance=.5):
     """Randomly return either string or an empty string of equal length."""
@@ -146,7 +144,8 @@ def main(filename=None, debug=False, noise=True):
         rm_chance.update_rate()
         rm_noise.update_rate()
         rm_speed.update_rate()
-        rm_speed.sleep()
+
+        time.sleep(rm_speed.rate)
 
         if rm_bumper.rate >= BUMPER_THRESHOLD:
             rm_speed.bump_rate()
