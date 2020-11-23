@@ -99,13 +99,25 @@ def main(filename=None, debug=False, noise=True):
     # of feel I was going for.
 
     # randomly varying rate of scrolling
-    rm_speed = RateManager(1, .1, 2.5, -.1)
+    rm_speed = RateManager(
+        initial_rate = 1,
+        min_rate = .1,
+        max_rate = 2.5,
+        rate_delta = -.1)
 
     # randomly varying rate of chance of output
-    rm_chance = RateManager(.2, .05, .9, .05)
+    rm_chance = RateManager(
+        initial_rate = .2,
+        min_rate = .05,
+        max_rate = .9,
+        rate_delta = .05)
 
     # randomly varying rate of chance of bumping up other rates
-    rm_bumper = RateManager(.01, .01, .95, .1)
+    rm_bumper = RateManager(
+        initial_rate = .01,
+        min_rate = .01,
+        max_rate = .95,
+        rate_delta = .1)
 
     # value of rm_bumper.rate above which other rates will be bumped.
     # The effect is that, above this threshold, the visualization should
@@ -113,7 +125,11 @@ def main(filename=None, debug=False, noise=True):
     BUMPER_THRESHOLD = .83
 
     # randomly varying rate of noise
-    rm_noise = RateManager(.1, .01, .99, -.007)
+    rm_noise = RateManager(
+        initial_rate = .1,
+        min_rate = .01,
+        max_rate = .99,
+        rate_delta = -.007)
 
     current_line_num = 0
     while True:
