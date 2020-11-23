@@ -101,7 +101,7 @@ def main(filename=None, debug=False, noise=True):
     # of feel I was going for.
 
     # randomly varying rate of scrolling
-    rm = RateManager(1, .1, 2.5, -.1)
+    rm_speed = RateManager(1, .1, 2.5, -.1)
 
     # randomly varying rate of chance of output
     rm_chance = RateManager(.2, .05, .9, .05)
@@ -121,7 +121,7 @@ def main(filename=None, debug=False, noise=True):
     while True:
         if debug:
             # Print current values of rate managers.
-            print(f"R{rm.rate:2.1f} "
+            print(f"R{rm_speed.rate:2.1f} "
                 f"C{rm_chance.rate:.2f} "
                 f"B{rm_bumper.rate:.2f} "
                 f"N{rm_noise.rate:.2f}|", end=" ")
@@ -145,11 +145,11 @@ def main(filename=None, debug=False, noise=True):
         rm_bumper.update_rate()
         rm_chance.update_rate()
         rm_noise.update_rate()
-        rm.update_rate()
-        rm.sleep()
+        rm_speed.update_rate()
+        rm_speed.sleep()
 
         if rm_bumper.rate >= BUMPER_THRESHOLD:
-            rm.bump_rate()
+            rm_speed.bump_rate()
             rm_chance.bump_rate()
 
 if __name__ == '__main__':
