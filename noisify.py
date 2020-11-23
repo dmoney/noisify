@@ -2,6 +2,7 @@ import time, sys, random, datetime
 import argparse
 
 def read_input(filename=None):
+    """Read input into an array of line strings."""
     if filename:
         with open(filename, 'r') as file:
             lines = [line.rstrip('\n') for line in file]
@@ -10,6 +11,7 @@ def read_input(filename=None):
         return [line for line in sys.stdin.read().split("\n")]
 
 class RateManager:
+    """A RateManager manages a value (rate) that randomly increases or decreases when the update_rate is called."""
     def __init__(self, initial_rate, min_rate, max_rate, rate_delta):
         self.rate = initial_rate
         self.max_rate = max_rate
@@ -17,6 +19,7 @@ class RateManager:
         self.rate_delta = rate_delta
 
     def update_rate(self):
+        """Randomly increse or decrease rate by rate_delta."""
         r = random.random()
         if r > .6:
             self.rate += self.rate_delta
@@ -26,6 +29,7 @@ class RateManager:
         self.rate = max(self.rate, self.min_rate)
 
     def bump_rate(self):
+        """Increase rate by rate delta."""
         self.rate += self.rate_delta
         self.rate = min(self.rate, self.max_rate)
         self.rate = max(self.rate, self.min_rate)
@@ -34,6 +38,7 @@ class RateManager:
         time.sleep(self.rate)
 
 def maybe(string, chance=.5):
+    """Randomly return either string or an empty string of equal length."""
     r = random.random()
     if r <= chance:
         return string
@@ -46,6 +51,7 @@ NOISE_CHARS = "abcdefghijklmnopqrstuvwxyz" + \
     ",.<>/?;:\'\"!@#$%^&*()-_=+\`~\\|[]{}"
 
 def noisify(string, factor):
+    """Return a copy of string, with characters randomly replaced with noise characters, at a rate determined by factor."""
     out = ""
     for c in string:
         if random.random() < factor:
@@ -54,6 +60,8 @@ def noisify(string, factor):
             out += c
     return out
 
+# Bumper rate manager causes speed and noise to increase more,
+# if its current rate is above this threshold.
 BUMPER_THRESHOLD = .83
 
 def main(filename=None, debug=False):
@@ -72,6 +80,7 @@ def main(filename=None, debug=False):
     # randomly varying rate of chance of bumping up other rates
     rm_bumper = RateManager(.01, .01, .95, .1)
 
+    # randomly varying rate of noise
     rm_noise = RateManager(.1, .01, .99, -.007)
 
     i = 0
@@ -85,6 +94,7 @@ def main(filename=None, debug=False):
         line = "   " + lines[i] + "   "
 
         def transform(s):
+            """Single use function for use in the generator expression below."""
             s = maybe(s, rm_chance.rate)
             if random.random() < rm_noise.rate:
                 s = noisify(s, rm_noise.rate)
