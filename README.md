@@ -1,7 +1,9 @@
 # noisify
-Script to infinitely scroll a piece of text or ascii art, with added textual noise.  Useful for decoration, meditation, etc.
+A script to infinitely scroll a piece of text or ascii art, with added textual noise.  Useful for decoration, meditation, etc.
 
-## Usage:
+The script reads the input, pads it so all lines are of equal length, and then scrolls an infinitely repeating grid of the input.  The added noise takes the form of a set of noise characters, as well as randomly dropping lines.  The rate at which this happens will vary randomly.
+
+## Basic Usage:
 
     $ python3 noisify.py [FILENAME]
 
@@ -19,9 +21,52 @@ Or after the noise ramps up a bit more:
 
 ![Screenshot showing a lot more text noise in rainbow colors, with some smiley faces poking through.](https://user-images.githubusercontent.com/30746/99933039-d8405000-2d27-11eb-84ba-f0e9ef3ea923.png)
 
-To see command-line options:
+## Randomly Varying Parameters
 
-    $ python3 noisify.py -h
+Several parameters will randomly vary after each line is printed:
+
+* The **rate** of scrolling (number of seconds to sleep between each line)
+* The level of **noise**
+* The **chance** of a line not being dropped (masked by spaces)
+* A parameter called **bumper**, which, when above a certain threshold, causes `rate` to decrease and `noise` to increase
+
+The values of these parameters can be displayed with the `--debug` option.
+
+## Command-Line Options
+
+### -h
+
+  Show help message and exit.
+
+### --no-noise
+
+Don't add noise, and don't drop lines.  Useful for verifying that the input is being read in correctly.
+
+### --debug
+
+Add a running display of the values of Rate (R), Chance (C), Bumper (B), and Noise (N).  It will look like:
+
+    R2.0 C0.25 B0.51 N0.61|  (noisified output...)
+
+### --term-width and --show-term-width
+
+When displaying directly to the terminal, it will get the terminal's width in order to determine how many repeating columns of the input it can display.  If the output is being piped to another program (such as `lolcat`), it won't be able to get the terminal width, so it will need to be explicitly set with `--term-width`.  In order to easily determine what value to use, the `--show-term-width` option will cause noisify to print the terminal width and exit.
+
+Example:
+
+    $ python3 noisify.py example.txt | lolcat
+    Couldn't get terminal width.  If you're sending the
+    output to another program, you may need to explicitly
+    specify the terminal width using --term-width=<number>.  
+    You can find the terminal width with --show-term-width.
+
+    $ python3 noisify.py --show-term-width
+    126
+
+    $ python3 noisify.py example.txt --term-width=126 | lolcat
+    (noisified, rainbow colored output)
+
+## Limitations
 
 Before producing output, noisify.py reads in the entire file or standard input
 until end of file (Ctrl+D if you're typing the input directly),
