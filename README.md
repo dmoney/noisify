@@ -45,7 +45,7 @@ Don't add noise, and don't drop lines.  Useful for verifying that the input is b
 
 ### --debug
 
-Add a running display of the values of Rate (R), Chance (C), Bumper (B), and Noise (N).  It will look like:
+Add a running display of the values of Rate (R), Chance (C), Bumper (B), and Noise (N) to each printed line.  It will look like:
 
     R2.0 C0.25 B0.51 N0.61|  (noisified output...)
 

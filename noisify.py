@@ -187,12 +187,13 @@ if __name__ == '__main__':
         help="don't add noise.")
 
     parser.add_argument('--debug', action="store_true",
-        help="show debugging information")
+        help="show debugging information on each line")
 
     parser.add_argument('--show-term-width', action="store_true",
         help="show current terminal window's width and exit")
 
-    parser.add_argument('--term-width', type=int)
+    parser.add_argument('--term-width', type=int,
+        help="set terminal width to use in calculating number of columns")
 
     args = parser.parse_args()
     filename = args.FILENAME
