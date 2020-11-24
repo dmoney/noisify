@@ -1,7 +1,8 @@
 # noisify
+
 A script to infinitely scroll a piece of text or ascii art, with added textual noise.  Useful for decoration, meditation, etc.
 
-The script reads the input, pads it so all lines are of equal length, and then scrolls an infinitely repeating grid of the input.  The added noise takes the form of a set of noise characters, as well as randomly dropping lines.  The rate at which this happens will vary randomly.
+The script reads the input, pads it so all lines are of equal length, and then scrolls an infinitely repeating grid of the input.  The added noise takes the form of a set of noise characters that randomly replace input characters, as well as randomly dropped lines.  The rate at which this happens will vary randomly over time.
 
 ## Basic Usage:
 
@@ -23,12 +24,12 @@ Or after the noise ramps up a bit more:
 
 ## Randomly Varying Parameters
 
-Several parameters will randomly vary after each line is printed:
+Several parameters will randomly vary (increase or decrease by an internally defined increment) after each line is printed:
 
 * The **rate** of scrolling (number of seconds to sleep between each line)
-* The level of **noise**
+* The level of **noise** (chance of replacing an input character with a noise character)
 * The **chance** of a line not being dropped (masked by spaces)
-* A parameter called **bumper**, which, when above a certain threshold, causes `rate` to decrease and `noise` to increase
+* A parameter called **bumper**, which, when above a certain threshold, causes `rate` to decrease (speed up) and `noise` to increase
 
 The values of these parameters can be displayed with the `--debug` option.
 
