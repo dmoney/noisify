@@ -14,7 +14,7 @@ For best results, add rainbow colors to the text by piping the result through [l
 
     $ python3 noisify.py --term-width=80 example.txt | lolcat
 
-Example output:
+## Example output:
 
 ![Screenshot showing ascii smiley faces in rainbow colors with text noise](https://user-images.githubusercontent.com/30746/99932780-18530300-2d27-11eb-96a3-b5694b9c8d9b.png)
 
@@ -52,8 +52,6 @@ Add a running display of the values of Rate (R), Chance (C), Bumper (B), and Noi
 ### --term-width and --show-term-width
 
 When displaying directly to the terminal, it will get the terminal's width in order to determine how many repeating columns of the input it can display.  If the output is being piped to another program (such as `lolcat`), it won't be able to get the terminal width, so it will need to be explicitly set with `--term-width`.  In order to easily determine what value to use, the `--show-term-width` option will cause noisify to print the terminal width and exit.
-
-Example:
 
     $ python3 noisify.py example.txt | lolcat
     Couldn't get terminal width.  If you're sending the
