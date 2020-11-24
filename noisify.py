@@ -3,7 +3,7 @@ import argparse
 
 def normalize_line_lengths(line_array):
     """Pad all strings in the array to be the same length."""
-    max_length = max([len(s) for s in line_array])
+    max_length = max(len(s) for s in line_array)
     for i, line in enumerate(line_array):
         line_array[i] += " " * (max_length - len(line))
 
@@ -161,7 +161,7 @@ def main(filename=None, debug=False, noise=True, term_width=None):
                     s = noisify(s, rm_noise.rate)
             return s
 
-        outline = "".join([transform(line, noise) for _ in range(num_columns)])
+        outline = "".join(transform(line, noise) for _ in range(num_columns))
         print(outline)
         sys.stdout.flush()
         current_line_num = (current_line_num + 1) % len(lines)
