@@ -29,7 +29,7 @@ Several parameters will randomly vary (increase or decrease by an internally def
 * The **rate** of scrolling (number of seconds to sleep between each line)
 * The level of **noise** (chance of replacing an input character with a noise character)
 * The **chance** of a line not being dropped (masked by spaces)
-* A parameter called **bumper**, which, when above a certain threshold, causes `rate` to decrease (speed up) and `noise` to increase
+* A parameter called **bumper**, which, when above a certain threshold, causes `rate` to decrease (speed up) and `chance` to increase
 
 The values of these parameters can be displayed with the `--debug` option.
 
